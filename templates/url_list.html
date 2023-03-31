@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1>List of URLs</h1>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Original URL</th>
+          <th>Short URL</th>
+          <th>Times visited</th>
+          <th>Created by</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for url in page_obj %}
+          <tr>
+            <td>{{ url.original_url }}</td>
+            <td><a href="http://localhost:8000/{{ url.shorter_url }}">http://localhost:8000/{{ url.shorter_url }}</a></td>
+            <td>{{ url.visit_count }}</td>
+            <td>{{ url.username }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4">No URLs found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <span class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">&lsaquo; prev</a>
+        {% endif %}
+
+        <span class="current-page">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next &rsaquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+{% endblock %}

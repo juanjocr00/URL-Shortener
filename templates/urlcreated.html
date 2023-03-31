@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<center>
+    <div class="alert alert-primary" role="alert">
+        <table>
+            <thead>
+                <tr>
+                    <th>URL original</th>
+                    <th>URL acortada</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for url in shorts %}
+                <tr>
+                    <td>{{ url.0 }}</td>
+                    <td><a href="http://localhost:8000/{{ url.1 }}">http://localhost:8000/{{ url.1 }}</a></td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+    <center>
+        <h1><a href="/download/"><button type="button" class="btn btn-secondary">Download a .txt File</button></a></h1>
+    </center>
+</center>
+{% endblock content %}
+

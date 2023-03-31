@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="jumbotron">
+        <center>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <center>{{ form.as_p }}</center>
+                <center><button type="submit" class="btn btn-success">Create URL:</button></center>
+            </form>
+        </center>
+    </div>
+{% endblock %}
+

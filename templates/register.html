@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="jumbotron">
+    <center>
+        <form class="form" method="post">
+            <h1>Register</h1>
+            {% csrf_token %}
+                {{form.as_p}}
+                <a><button class="btn btn-secundary" type="submit">Register</button></a>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+        </form>
+    </center>
+</div>
+
+    </center>
+</div>
+{% endblock content %}
