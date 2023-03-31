@@ -1,8 +1,14 @@
 import os
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 from .models import shorterURL
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 from django.http import FileResponse
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -134,7 +140,12 @@ def redirect(request, url):
     try:
         current = shorterURL.objects.get(shorter_url=url)
         if current.private==True and current.username != request.user.username:
-            return render(request, 'registration/login.html')
+            if request.user.is_authenticated:
+                messages.error(request, 'This URL is private.')
+                return render(request, 'home.html')
+            else:
+                messages.error(request, 'This URL is private. Log In and try again.')
+                return LoginView.as_view(template_name='registration/login.html')(request)
         web_visit = get_object_or_404(shorterURL, shorter_url=url)
         web_visit.visit_count +=1
         web_visit.save()

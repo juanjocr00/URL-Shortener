@@ -3,3 +3,4 @@ url_app/__pycache__/
 my_env/
 short_url/__pycache__/
 url_app/migrations/__pycache__/
+url_app/api/__pycache__/

@@ -1,7 +1,6 @@
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, logout_then_login
 from .views import home, UrlShortener, redirect, url_list, register, download_urls, UrlFile
-
 urlpatterns = [
     path('', home, name='home'),
     path('create/', UrlShortener, name='create'),
