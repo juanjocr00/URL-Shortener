@@ -13,8 +13,12 @@
             <tbody>
                 {% for url in shorts %}
                 <tr>
-                    <td>{{ url.0 }}</td>
-                    <td><a href="http://localhost:8000/{{ url.1 }}">http://localhost:8000/{{ url.1 }}</a></td>
+                    {% if url.0|length > 150 %}
+                        <td>{{ url.0 |slice:":150" }}...</td>
+                    {% else %}
+                        <td>{{ url.0 }}</td>
+                    {% endif %}
+                    <td><a href="/{{ url.1 }}">http://localhost/{{ url.1 }} </a></td>
                 </tr>
                 {% endfor %}
 
