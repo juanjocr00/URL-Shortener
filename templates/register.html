@@ -7,7 +7,19 @@
         <form class="form" method="post">
             <h1>Register</h1>
             {% csrf_token %}
-                {{form.as_p}}
+            <br>
+                <th>Email address</th>
+                <td>{{form.email}}</td>
+                <br>
+                <th>Username</th>
+                <td>{{form.username}}</td>
+                <br>
+                <th>Password</th>
+                <td>{{form.password1}}</td>
+                <br>
+                <th>Confirm Password</th>
+                <td>{{form.password2}}<td>
+                <br>
                 <a><button class="btn btn-secundary" type="submit">Register</button></a>
                 {% if messages %}
                     {% for message in messages %}

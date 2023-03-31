@@ -5,9 +5,22 @@
         <center>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <center>{{ form.as_p }}</center>
+                <center>
+                    <h2>Submit your File:</h2>
+                    {{ form.file }}
+                    <p></p>
+                    <th>Private URL</th>
+                    <td>{{ form.private }} </td>
+                </center>
                 <center><button type="submit" class="btn btn-success">Create URL:</button></center>
             </form>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </center>
     </div>
 {% endblock %}

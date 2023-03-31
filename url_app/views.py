@@ -25,6 +25,10 @@ def UrlShortener(request):
             original_website = form.cleaned_data['original_url'].splitlines()
             global urls
             urls = []
+            if form.cleaned_data['private'] == True:
+                is_private = True
+            else:
+                is_private = False
             for values in original_website:
                     found = False
                     for tuple in urls:
@@ -51,10 +55,16 @@ def UrlShortener(request):
                                     for i in range (6):
                                         random_chars += random.choice(random_list)
                                 user = request.user.username
-                                short_to_db= shorterURL(original_url=values, shorter_url=random_chars, username=user)
+                                short_to_db= shorterURL(original_url=values, shorter_url=random_chars, username=user, private=is_private)
                                 short_to_db.save()
                                 urls.append((values, random_chars))
-            return render(request, 'urlcreated.html', {'shorts':urls})
+            if len(urls) == 0:
+                form=NewShortUrl()
+                context={'form':form}
+                messages.error(request, 'No valid URL found.')
+                return render(request, 'create.html', context) 
+            else:                
+                return render(request, 'urlcreated.html', {'shorts':urls})
         return urls
     else:
         form=NewShortUrl()
@@ -73,6 +83,10 @@ def UrlFile(request):
             original_website = file.read().decode('utf-8').splitlines()
             global urls
             urls = []
+            if form.cleaned_data['private'] == True:
+                is_private = True
+            else:
+                is_private = False
             for values in original_website:
                     found = False
                     for tuple in urls:
@@ -99,26 +113,37 @@ def UrlFile(request):
                                     for i in range (6):
                                         random_chars += random.choice(random_list)
                                 user = request.user.username
-                                short_to_db= shorterURL(original_url=values, shorter_url=random_chars, username=user)
+                                short_to_db= shorterURL(original_url=values, shorter_url=random_chars, username=user, private=is_private)
                                 short_to_db.save()
                                 urls.append((values, random_chars))
-            return render(request, 'urlcreated.html', {'shorts':urls})
+            if len(urls) == 0:
+                form = FileUploadForm()
+                context={'form':form}
+                messages.error(request, 'No valid URL found.')
+                return render(request, 'file_upload.html', context)     
+            else:                
+                return render(request, 'urlcreated.html', {'shorts':urls})
         return urls 
     else:
-        form=NewShortUrl()
         form = FileUploadForm()
         context={'form':form}
         return render(request, 'file_upload.html', context)  
 
 def redirect(request, url):
     current_obj = shorterURL.objects.filter(shorter_url=url)
-    web_visit = get_object_or_404(shorterURL, shorter_url=url)
-    web_visit.visit_count +=1
-    web_visit.save()
-    if len(current_obj) == 0:
-        return render(request, 'pagenotfound.html')
-    context = {'obj': current_obj[0]}
-    return render(request, 'redirect.html', context)
+    try:
+        current = shorterURL.objects.get(shorter_url=url)
+        if current.private==True and current.username != request.user.username:
+            return render(request, 'registration/login.html')
+        web_visit = get_object_or_404(shorterURL, shorter_url=url)
+        web_visit.visit_count +=1
+        web_visit.save()
+        if len(current_obj) == 0:
+            return render(request, 'pagenotfound.html')
+        context = {'obj': current_obj[0]}
+        return render(request, 'redirect.html', context)
+    except shorterURL.DoesNotExist:
+        return render(request, 'login')
 
 @login_required
 def url_list(request):
