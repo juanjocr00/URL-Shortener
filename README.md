@@ -1,5 +1,5 @@
 
-# Prueba Técnica Sunwise
+# URL Shortener
 
 ## Acortador de URLs con Django
 Este proyecto es una Rest API hecha con Django en Python que permite a los usuarios acortar URLs largas y acceder a ellas de manera más fácil y rápida. Además, cuenta con un sistema de autenticación para los usuarios y ofrece la posibilidad de crear URLs públicas o privadas.
